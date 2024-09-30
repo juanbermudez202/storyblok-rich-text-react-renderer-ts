@@ -30,5 +30,7 @@ export const defaultMarkResolvers = {
   italic: simpleMarkResolver('i'),
   strike: simpleMarkResolver('s'),
   underline: simpleMarkResolver('u'),
-  code: simpleMarkResolver('code')
+  code: simpleMarkResolver('code'),
+  textStyle: (children: ReactNode, {color}: {color: string}): JSX.Element | null =>
+    createElement('span', { style: `color: ${color} !important` }, children),
 }
