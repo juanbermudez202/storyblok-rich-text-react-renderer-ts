@@ -13,4 +13,8 @@ export declare const defaultBlocksResolvers: {
     list_item: (children: ReactNode) => JSX.Element | null;
     horizontal_rule: () => JSX.Element | null;
     hard_break: () => JSX.Element | null;
+    table: (children: ReactNode) => JSX.Element | null;
+    table_row: (children: ReactNode) => JSX.Element | null;
+    table_header: (children: ReactNode) => JSX.Element | null;
+    table_data: (children: ReactNode) => JSX.Element | null;
 };
