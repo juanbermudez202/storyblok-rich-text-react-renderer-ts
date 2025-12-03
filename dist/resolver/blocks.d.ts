@@ -1,6 +1,14 @@
 import { CodeAttributes, HeadingAttributes, ImageAttributes } from '@marvr/storyblok-rich-text-types';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 export declare type StoryblokRichtextContentType = "heading" | "code_block" | "paragraph" | "blockquote" | "ordered_list" | "bullet_list" | "list_item" | "horizontal_rule" | "hard_break" | "image" | "blok";
+declare type TableCellProps = {
+    colspan?: number;
+    rowspan?: number;
+    backgroundColor?: string;
+    colwidth?: number[];
+    'data-colwidth'?: string;
+    style?: React.CSSProperties;
+};
 export declare const defaultBlocksResolvers: {
     doc: (children: ReactNode) => JSX.Element | null;
     heading: (children: ReactNode, attrs: HeadingAttributes) => JSX.Element | null;
@@ -15,6 +23,7 @@ export declare const defaultBlocksResolvers: {
     hard_break: () => JSX.Element | null;
     table: (children: ReactNode) => JSX.Element | null;
     table_row: (children: ReactNode) => JSX.Element | null;
-    table_header: (children: ReactNode) => JSX.Element | null;
-    table_data: (children: ReactNode) => JSX.Element | null;
+    table_header: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
+    table_cell: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
 };
+export {};

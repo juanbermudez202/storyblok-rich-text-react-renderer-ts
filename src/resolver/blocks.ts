@@ -1,5 +1,5 @@
 import { CodeAttributes, HeadingAttributes, ImageAttributes } from '@marvr/storyblok-rich-text-types'
-import { FunctionComponent, ReactNode, createElement } from 'react'
+import React, { Attributes, FunctionComponent, ReactNode, createElement } from 'react'
 
 export type StoryblokRichtextContentType =
   | "heading"
@@ -20,6 +20,40 @@ const simpleNodeResolver = (element: string | FunctionComponent) => (children: R
 const emptyNodeResolver = (element: string | FunctionComponent) => (): JSX.Element | null =>
   createElement(element)
 
+type TableCellProps = {
+  colspan?: number;
+  rowspan?: number;
+  backgroundColor?: string;
+  colwidth?: number[];
+  'data-colwidth'?: string;
+  style?: React.CSSProperties;
+}
+
+const tableCellNodeResolver = (el: string | FunctionComponent) => (children: ReactNode, props: TableCellProps): JSX.Element | null => {
+    const tableCellProps: TableCellProps = {}
+    const tableCellStyle: React.CSSProperties = {}
+    if (props.colspan !== 1) {
+        tableCellProps.colspan = props.colspan;
+    }
+    if (props.rowspan !== 1) {
+        tableCellProps.rowspan = props.rowspan;
+    }
+    if (props.backgroundColor) {
+        tableCellStyle.backgroundColor = props.backgroundColor;
+    }
+    if (Array.isArray(props.colwidth)) {
+        if (props.colwidth.length === 1) {
+            tableCellStyle['width'] = props.colwidth[0] + 'px'
+        } else {
+            tableCellProps['data-colwidth'] = props.colwidth.join(',')
+        }
+    }
+    if (Object.keys(tableCellStyle).length > 0) {
+        tableCellProps.style = tableCellStyle
+    }
+    return React.createElement(el, tableCellProps as Attributes, children)
+};
+
 export const defaultBlocksResolvers = {
   doc: simpleNodeResolver('div'),
   heading: (children: ReactNode, attrs: HeadingAttributes): JSX.Element | null =>
@@ -37,6 +71,6 @@ export const defaultBlocksResolvers = {
   hard_break: emptyNodeResolver('br'),
   table: simpleNodeResolver('table'),
   table_row: simpleNodeResolver('tr'),
-  table_header: simpleNodeResolver('th'),
-  table_data: simpleNodeResolver('td')
+  table_header: tableCellNodeResolver('th'),
+  table_cell: tableCellNodeResolver('td')
 }
