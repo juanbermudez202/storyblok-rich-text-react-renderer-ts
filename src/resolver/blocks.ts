@@ -34,5 +34,9 @@ export const defaultBlocksResolvers = {
   bullet_list: simpleNodeResolver('ul'),
   list_item: simpleNodeResolver('li'),
   horizontal_rule: emptyNodeResolver('hr'),
-  hard_break: emptyNodeResolver('br')
+  hard_break: emptyNodeResolver('br'),
+  table: simpleNodeResolver('table'),
+  table_row: simpleNodeResolver('tr'),
+  table_header: simpleNodeResolver('th'),
+  table_data: simpleNodeResolver('td')
 }
