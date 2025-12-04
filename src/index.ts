@@ -1,39 +1,39 @@
 import React, { ReactNode } from 'react'
-import { defaultBlocksResolvers, StoryblokRichtextContentType } from './resolver/blocks'
+import { defaultNodesResolvers, StoryblokRichtextContentType } from './resolver/blocks'
 import { defaultMarkResolvers, StoryblokRichtextMark } from './resolver/mark'
 
 type StoryblokRichtextContent = {
-  type: StoryblokRichtextContentType;
+  type: StoryblokRichtextContentType
   attrs?: {
-    level?: number;
-    class?: string;
-    src?: string;
-    alt?: string;
-    title?: string;
-    order?: number;
+    level?: number
+    class?: string
+    src?: string
+    alt?: string
+    title?: string
+    order?: number
     body?: Array<{
-      _uid: string;
-    }>;
-  };
+      _uid: string
+    }>
+  }
   marks?: {
-    type: StoryblokRichtextMark;
+    type: StoryblokRichtextMark
     attrs?: {
-      linktype?: string;
-      href?: string;
-      target?: string;
-      anchor?: string;
-      uuid?: string;
-      class?: string;
-    };
-  }[];
-  text?: string;
-  content: StoryblokRichtextContent[];
-};
+      linktype?: string
+      href?: string
+      target?: string
+      anchor?: string
+      uuid?: string
+      class?: string
+    }
+  }[]
+  text?: string
+  content: StoryblokRichtextContent[]
+}
 
 export type StoryblokRichtext = {
-  type: 'doc';
-  content: StoryblokRichtextContent[];
-};
+  type: 'doc'
+  content: StoryblokRichtextContent[]
+}
 
 export { Mark, Block } from '@marvr/storyblok-rich-text-types'
 
@@ -42,21 +42,25 @@ export type RenderOptionsProps = {
     [k: string]: (props: any) => JSX.Element | null
   }
   defaultBlokResolver?: (name: string, props: any) => JSX.Element | null
-  nodeResolvers?: Partial<typeof defaultBlocksResolvers>
+  nodeResolvers?: Partial<typeof defaultNodesResolvers>
   markResolvers?: Partial<typeof defaultMarkResolvers>
   defaultStringResolver?: (str: string) => JSX.Element
+  textResolver?: (str: string) => ReactNode
 }
 
 export const render = (document: StoryblokRichtext | any, options?: RenderOptionsProps): ReactNode | null => {
-  if (document?.type === 'doc' && Array.isArray(document?.content)) {
+  if (typeof document === 'object' &&
+        document.type === 'doc' &&
+        Array.isArray(document.content)) {
     const {
       blokResolvers = {},
       defaultBlokResolver = () => null,
       nodeResolvers: customNodeResolvers = {},
-      markResolvers: customMarkResolvers = {}
+      markResolvers: customMarkResolvers = {},
+      textResolver = (str: string) => str,
     } = options ?? {}
     const nodeResolvers: any = {
-      ...defaultBlocksResolvers,
+      ...defaultNodesResolvers,
       ...customNodeResolvers
     }
 
@@ -94,7 +98,7 @@ export const render = (document: StoryblokRichtext | any, options?: RenderOption
       } else {
         let childNode
         if (node.type === 'text') {
-          childNode = node.text
+          childNode = textResolver(node.text)
         } else {
           const resolver = nodeResolvers[node.type]
           childNode = resolver

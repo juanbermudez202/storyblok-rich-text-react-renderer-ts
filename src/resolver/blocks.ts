@@ -12,7 +12,11 @@ export type StoryblokRichtextContentType =
   | "horizontal_rule"
   | "hard_break"
   | "image"
-  | "blok";
+  | "blok"
+  | "table"
+  | "tableRow"
+  | "tableHeader"
+  | "tableCell"
 
 const simpleNodeResolver = (element: string | FunctionComponent) => (children: ReactNode): JSX.Element | null =>
   children != null ? createElement(element, null, children) : null
@@ -52,12 +56,29 @@ const tableCellNodeResolver = (el: string | FunctionComponent) => (children: Rea
         tableCellProps.style = tableCellStyle
     }
     return React.createElement(el, tableCellProps as Attributes, children)
-};
+}
+
+const headingNodeResolver = (children: ReactNode, props: HeadingAttributes) =>
+    React.createElement(`h${props.level}`, null, children)
 
 export const defaultBlocksResolvers = {
   doc: simpleNodeResolver('div'),
-  heading: (children: ReactNode, attrs: HeadingAttributes): JSX.Element | null =>
-    createElement(`h${attrs.level}`, null, children),
+  heading: headingNodeResolver,
+  code_block: (children: ReactNode, attrs: CodeAttributes): JSX.Element | null =>
+    createElement('pre', null, createElement('code', { className: attrs.class }, children)),
+  image: (children: ReactNode, attrs: ImageAttributes): JSX.Element | null =>
+    createElement('img', attrs, children),
+  paragraph: simpleNodeResolver('p'),
+  blockquote: simpleNodeResolver('blockquote'),
+  ordered_list: simpleNodeResolver('ol'),
+  bullet_list: simpleNodeResolver('ul'),
+  list_item: simpleNodeResolver('li'),
+  horizontal_rule: emptyNodeResolver('hr'),
+  hard_break: emptyNodeResolver('br'),
+}
+
+export const defaultNodesResolvers = {
+  heading: headingNodeResolver,
   code_block: (children: ReactNode, attrs: CodeAttributes): JSX.Element | null =>
     createElement('pre', null, createElement('code', { className: attrs.class }, children)),
   image: (children: ReactNode, attrs: ImageAttributes): JSX.Element | null =>
@@ -70,7 +91,7 @@ export const defaultBlocksResolvers = {
   horizontal_rule: emptyNodeResolver('hr'),
   hard_break: emptyNodeResolver('br'),
   table: simpleNodeResolver('table'),
-  table_row: simpleNodeResolver('tr'),
-  table_header: tableCellNodeResolver('th'),
-  table_cell: tableCellNodeResolver('td')
+  tableRow: simpleNodeResolver('tr'),
+  tableHeader: tableCellNodeResolver('th'),
+  tableCell: tableCellNodeResolver('td')
 }

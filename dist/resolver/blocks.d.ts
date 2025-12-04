@@ -1,6 +1,6 @@
 import { CodeAttributes, HeadingAttributes, ImageAttributes } from '@marvr/storyblok-rich-text-types';
 import React, { ReactNode } from 'react';
-export declare type StoryblokRichtextContentType = "heading" | "code_block" | "paragraph" | "blockquote" | "ordered_list" | "bullet_list" | "list_item" | "horizontal_rule" | "hard_break" | "image" | "blok";
+export declare type StoryblokRichtextContentType = "heading" | "code_block" | "paragraph" | "blockquote" | "ordered_list" | "bullet_list" | "list_item" | "horizontal_rule" | "hard_break" | "image" | "blok" | "table" | "tableRow" | "tableHeader" | "tableCell";
 declare type TableCellProps = {
     colspan?: number;
     rowspan?: number;
@@ -11,7 +11,19 @@ declare type TableCellProps = {
 };
 export declare const defaultBlocksResolvers: {
     doc: (children: ReactNode) => JSX.Element | null;
-    heading: (children: ReactNode, attrs: HeadingAttributes) => JSX.Element | null;
+    heading: (children: ReactNode, props: HeadingAttributes) => React.DetailedReactHTMLElement<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    code_block: (children: ReactNode, attrs: CodeAttributes) => JSX.Element | null;
+    image: (children: ReactNode, attrs: ImageAttributes) => JSX.Element | null;
+    paragraph: (children: ReactNode) => JSX.Element | null;
+    blockquote: (children: ReactNode) => JSX.Element | null;
+    ordered_list: (children: ReactNode) => JSX.Element | null;
+    bullet_list: (children: ReactNode) => JSX.Element | null;
+    list_item: (children: ReactNode) => JSX.Element | null;
+    horizontal_rule: () => JSX.Element | null;
+    hard_break: () => JSX.Element | null;
+};
+export declare const defaultNodesResolvers: {
+    heading: (children: ReactNode, props: HeadingAttributes) => React.DetailedReactHTMLElement<React.HTMLAttributes<HTMLElement>, HTMLElement>;
     code_block: (children: ReactNode, attrs: CodeAttributes) => JSX.Element | null;
     image: (children: ReactNode, attrs: ImageAttributes) => JSX.Element | null;
     paragraph: (children: ReactNode) => JSX.Element | null;
@@ -22,8 +34,8 @@ export declare const defaultBlocksResolvers: {
     horizontal_rule: () => JSX.Element | null;
     hard_break: () => JSX.Element | null;
     table: (children: ReactNode) => JSX.Element | null;
-    table_row: (children: ReactNode) => JSX.Element | null;
-    table_header: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
-    table_cell: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
+    tableRow: (children: ReactNode) => JSX.Element | null;
+    tableHeader: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
+    tableCell: (children: ReactNode, props: TableCellProps) => JSX.Element | null;
 };
 export {};

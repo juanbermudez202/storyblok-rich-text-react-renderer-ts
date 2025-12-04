@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { defaultBlocksResolvers, StoryblokRichtextContentType } from './resolver/blocks';
+import { defaultNodesResolvers, StoryblokRichtextContentType } from './resolver/blocks';
 import { defaultMarkResolvers, StoryblokRichtextMark } from './resolver/mark';
 declare type StoryblokRichtextContent = {
     type: StoryblokRichtextContentType;
@@ -38,8 +38,9 @@ export declare type RenderOptionsProps = {
         [k: string]: (props: any) => JSX.Element | null;
     };
     defaultBlokResolver?: (name: string, props: any) => JSX.Element | null;
-    nodeResolvers?: Partial<typeof defaultBlocksResolvers>;
+    nodeResolvers?: Partial<typeof defaultNodesResolvers>;
     markResolvers?: Partial<typeof defaultMarkResolvers>;
     defaultStringResolver?: (str: string) => JSX.Element;
+    textResolver?: (str: string) => ReactNode;
 };
 export declare const render: (document: StoryblokRichtext | any, options?: RenderOptionsProps) => ReactNode | null;
